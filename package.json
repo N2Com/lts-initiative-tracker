@@ -1,22 +1,35 @@
 {
-  "name": "lts-initiative-tracker",
-  "version": "0.1.0",
+  "productName": "Less Than Simple Initiative Tracker",
+  "main": "public/electron.js",
+  "name": "simple-initiative-tracker",
+  "version": "0.2.0",
+  "description": "A truly simple initiative tracker, with no extra fluff",
+  "author": {
+    "name": "N2Com",
+    "email": "thenifusion@gmail.com"
+  },
   "private": true,
   "dependencies": {
-    "@reduxjs/toolkit": "^1.5.1",
+    "@reduxjs/toolkit": "^1.6.1",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "cross-env": "^7.0.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.3",
-    "react-scripts": "4.0.3"
+    "react-scripts": "4.0.3",
+    "redux-logic": "^3.0.3"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "react-start": "react-scripts start",
+    "react-build": "react-scripts build",
+    "react-test": "react-scripts test --env=jsdom",
+    "react-eject": "react-scripts eject",
+    "electron-build": "electron-builder",
+    "release": "yarn react-build && electron-builder --publish=always",
+    "build": "yarn react-build && electron-builder",
+    "start": "concurrently \"cross-env yarn react-start\" \"wait-on http://localhost:3000 && electron .\""
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -32,5 +45,12 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "concurrently": "^6.2.1",
+    "electron": "^14.0.1",
+    "electron-builder": "^22.11.7",
+    "electron-is-dev": "^2.0.0",
+    "wait-on": "^6.0.0"
   }
 }

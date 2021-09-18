@@ -1,6 +1,4 @@
-import { createAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import {createLogic} from "redux-logic"
-import { fetchCount } from "./counterAPI";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
@@ -10,16 +8,13 @@ import { fetchCount } from "./counterAPI";
 export const incrementAsync = createAsyncThunk(
   "counter/fetchCount",
   async (amount) => {
-    const response = await fetchCount(amount);
     // The value we return becomes the `fulfilled` action payload
-    return response.data;
+    return 2;
   }
 );
 
-export const init = createAction('counter/init');
-
-export const counterSlice = createSlice({
-  name: "counter",
+export const gridSlice = createSlice({
+  name: "grid",
   initialState: {
     value: 0,
     status: "idle",
@@ -54,7 +49,7 @@ export const counterSlice = createSlice({
   },
 });
 
-export const { increment, decrement, incrementByAmount } = counterSlice.actions;
+export const { increment, decrement, incrementByAmount } = gridSlice.actions;
 
 // We can also write thunks by hand, which may contain both sync and async logic.
 // Here's an example of conditionally dispatching actions based on current state.
@@ -65,4 +60,4 @@ export const incrementIfOdd = (amount) => (dispatch, getState) => {
   }
 };
 
-export default counterSlice.reducer;
+export default gridSlice.reducer;
