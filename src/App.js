@@ -5,14 +5,14 @@ import "./App.css";
 import storeFactory from "./app/store";
 import TOPPAGE from "./TOPPAGE";
 import { Provider } from "react-redux";
-
+import LTSGrid from "./LTSGrid";
 
 function App() {
   const store = storeFactory();
   return (
     <React.StrictMode>
       <Provider store={store}>
-        <TOPPAGE />
+        <LTSGrid />
       </Provider>
     </React.StrictMode>
   );

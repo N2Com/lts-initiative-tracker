@@ -4,6 +4,7 @@ const logicBoii = createLogic({
   type: "*",
   process({}, dispatch, done) {
     console.log("yay");
+    done();
   },
 });
 
