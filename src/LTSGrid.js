@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, createRef } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import ReactTooltip from "react-tooltip";
 import { connect } from "react-redux";
@@ -12,6 +12,7 @@ import {
   ListItem,
   ListItemText,
   TextField,
+  RootRef,
 } from "@material-ui/core/";
 import {
   addPlayer,
@@ -21,7 +22,7 @@ import {
   updateIndices,
 } from "./features/initiative/initiativeSlice";
 import { useState } from "react";
-import { useDropzone } from "react-dropzone";
+import Dropzone, { useDropzone } from "react-dropzone";
 import PlayerPaper from "./PlayerPaper";
 
 const useStyles = makeStyles((theme) => ({
@@ -39,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
   terms: {
     overflow: "auto",
     "&::-webkit-scrollbar": {
-      width: "3em",
+      width: "2em",
     },
     "&::-webkit-scrollbar-track": {
       border: "2px grey solid",
@@ -94,7 +95,11 @@ function LTSGrid(props) {
     });
   }, []);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps, open, acceptedFiles } = useDropzone({
+    onDrop,
+    noClick: true,
+    accept: '.json'
+  });
 
   const onChangeNewPlayer = (e) => {
     const { name, value, type } = e.target;
@@ -139,22 +144,25 @@ function LTSGrid(props) {
     <div className={classes.root}>
       <Box display="flex" flexDirection="column" style={{ height: "100vh" }}>
         <Grid container flexShrink="1" className={classes.topGrid}>
-          <Grid item xs={5}>
-            <div {...getRootProps()}>
-              <input {...getInputProps()} />
-              {isDragActive ? (
-                <div>Drop the files here ...</div>
-              ) : (
-                <div>Drag 'n' drop some files here, or click to select files</div>
-              )}
-            </div>
+          <Grid item xs={6}>
+            <Button
+              fullWidth
+              size="medium"
+              variant="outlined"
+              color="primary"
+              onClick={open}
+            >
+              <div style={{ height: "100%" }} {...getRootProps()}>
+                <input {...getInputProps()} />
+                <div>Import premade</div>
+              </div>
+            </Button>
           </Grid>
-          <Grid item xs={5}></Grid>
+          <Grid item xs={4}></Grid>
           <Grid item xs={2}>
             <Button
-              className={classes.buttonSpacing0}
               fullWidth
-              size="small"
+              size="medium"
               variant="outlined"
               color="secondary"
               onClick={clearPlayers}
@@ -166,27 +174,35 @@ function LTSGrid(props) {
           </Grid>
         </Grid>
         <Box flex="1" className={classes.terms}>
-          <Grid container direction="row" justify="center" alignItems="center">
-            <List component="nav" style={{ flexGrow: 1 }}>
-              {sortedPlayers.map((player, index) => {
-                return (
-                  <Paper className={classes.paperListItem}>
-                    <ListItem selected={index === turnIndex}>
-                      <ListItemText>
-                        {
-                          <PlayerPaper
-                            key={player.key}
-                            index={index}
-                            player={player}
-                          ></PlayerPaper>
-                        }
-                      </ListItemText>
-                    </ListItem>
-                  </Paper>
-                );
-              })}
-            </List>
-          </Grid>
+          <div style={{ height: "100%" }} {...getRootProps()}>
+            <input {...getInputProps()} />
+            <Grid
+              container
+              direction="row"
+              justify="center"
+              alignItems="center"
+            >
+              <List component="nav" style={{ flexGrow: 1 }}>
+                {sortedPlayers.map((player, index) => {
+                  return (
+                    <Paper className={classes.paperListItem}>
+                      <ListItem selected={index === turnIndex}>
+                        <ListItemText>
+                          {
+                            <PlayerPaper
+                              key={player.key}
+                              index={index}
+                              player={player}
+                            ></PlayerPaper>
+                          }
+                        </ListItemText>
+                      </ListItem>
+                    </Paper>
+                  );
+                })}
+              </List>
+            </Grid>
+          </div>
         </Box>
 
         <Grid container className={classes.botGrid}>

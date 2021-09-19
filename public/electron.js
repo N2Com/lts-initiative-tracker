@@ -13,7 +13,7 @@ function createWindow() {
   // Create the browser window.
   window = new BrowserWindow({
     width: 420,
-    minWidth:420,
+    minWidth: 420,
     height: 560,
     minHeight: 560,
     show: true,
@@ -25,6 +25,7 @@ function createWindow() {
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
     },
+    icon: path.join(__dirname, "icosahedron.png"),
     nodeIntegration: false,
   });
 
@@ -47,7 +48,7 @@ function createWindow() {
   }
 
   // Open the DevTools.
-  // window.webContents.openDevTools()
+  //window.webContents.openDevTools()
 }
 
 // This method will be called when Electron has finished
