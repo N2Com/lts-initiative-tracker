@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { v4 as uuidv4 } from "uuid";
 
 export const initiativeSlice = createSlice({
   name: "initiative",
@@ -47,17 +48,10 @@ export const initiativeSlice = createSlice({
         p.key === action.payload.key ? { ...action.payload } : p
       );
     },
-    updateIndices(state, action) {
-      console.log("Editing player", action.payload);
-      //state.players = state.players.map((p) =>
-      //  p.key === action.payload.key
-      //    ? { isTurn: p.isTurn, ...action.payload }
-      //    : p
-      //);
-    },
     addPlayer(state, action) {
       console.log("Adding player", action.payload);
-      state.players.push(action.payload);
+      const player = { key: uuidv4(), ...action.payload };
+      state.players.push(player);
     },
   },
   extraReducers: {
@@ -66,23 +60,6 @@ export const initiativeSlice = createSlice({
     },
   },
 });
-
-export const sortFunction = (a, b) => {
-  //  null is last
-  if (a.initiative === null) return 1;
-  if (b.initiative === null) return -1;
-
-  //  sort by initiative
-  if (a.initiative > b.initiative) return -1;
-  else if (a.initiative < b.initiative) return 1;
-
-  //  fallback to priority
-  if (a.priority > b.priority) return -1;
-  else if (a.priority < b.priority) return 1;
-
-  //  fallback to name
-  return a.name.localeCompare(b.name);
-};
 
 export const {
   nextTurn,

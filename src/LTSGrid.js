@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { v4 as uuidv4 } from "uuid";
 import ReactTooltip from "react-tooltip";
 import { connect } from "react-redux";
 import { ArrowBack, ArrowForward, Publish } from "@material-ui/icons";
@@ -22,6 +21,7 @@ import {
   updateIndices,
 } from "./features/initiative/initiativeSlice";
 import { useState } from "react";
+import { useDropzone } from "react-dropzone";
 import PlayerPaper from "./PlayerPaper";
 
 const useStyles = makeStyles((theme) => ({
@@ -72,6 +72,30 @@ function LTSGrid(props) {
     initiative: null,
   });
 
+  const { players, clearPlayers, addPlayer, nextTurn, prevTurn, turnIndex } =
+    props;
+
+  const onDrop = useCallback((acceptedFiles) => {
+    console.log(acceptedFiles);
+    acceptedFiles.forEach((file) => {
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        var contents = e.target.result;
+
+        const players = JSON.parse(contents).players;
+        if (players?.length > 0) {
+          players.forEach((p) => {
+            console.log(p);
+            addPlayer(p);
+          });
+        }
+      };
+      reader.readAsText(file);
+    });
+  }, []);
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+
   const onChangeNewPlayer = (e) => {
     const { name, value, type } = e.target;
     console.log("New player", e);
@@ -83,15 +107,12 @@ function LTSGrid(props) {
   };
 
   const addNewPlayer = () => {
-    addPlayer({ ...newPlayer, key: uuidv4(), isTurn: false });
+    addPlayer({ ...newPlayer });
     setNewPlayer({
       name: "",
       initiative: 0,
     });
   };
-
-  const { players, clearPlayers, addPlayer, nextTurn, prevTurn, turnIndex } =
-    props;
 
   const sortFunction = (a, b) => {
     //  null is last
@@ -118,7 +139,16 @@ function LTSGrid(props) {
     <div className={classes.root}>
       <Box display="flex" flexDirection="column" style={{ height: "100vh" }}>
         <Grid container flexShrink="1" className={classes.topGrid}>
-          <Grid item xs={5}></Grid>
+          <Grid item xs={5}>
+            <div {...getRootProps()}>
+              <input {...getInputProps()} />
+              {isDragActive ? (
+                <div>Drop the files here ...</div>
+              ) : (
+                <div>Drag 'n' drop some files here, or click to select files</div>
+              )}
+            </div>
+          </Grid>
           <Grid item xs={5}></Grid>
           <Grid item xs={2}>
             <Button
