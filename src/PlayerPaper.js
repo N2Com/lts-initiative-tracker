@@ -2,12 +2,9 @@ import React, { useState } from "react";
 import { TextField, Grid, Box } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import ReactTooltip from "react-tooltip";
-import { ArrowBackIos, Delete } from "@material-ui/icons";
+import { Delete } from "@material-ui/icons";
 import {
-  addPlayer,
-  clearPlayers,
   editPlayer,
-  nextTurn,
   removePlayer,
 } from "./features/initiative/initiativeSlice";
 import { connect } from "react-redux";
@@ -26,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
 
 function PlayerPaper(props) {
   const classes = useStyles();
-  const { player, removePlayer, index } = props;
+  const { player, removePlayer } = props;
 
   const [_player, setPlayer] = useState({
     key: player.key,
@@ -40,7 +37,7 @@ function PlayerPaper(props) {
 
     setPlayer({
       ..._player,
-      [name]: type === "number" ? (value ? parseInt(value) : null) : value,
+      [name]: type === "number" ? (value ? parseInt(value) : "") : value,
     });
   };
 
@@ -83,7 +80,7 @@ function PlayerPaper(props) {
           <TextField
             label="Name"
             name="name"
-            value={_player.name}
+            value={_player.name || ""}
             onChange={(e) => editPlayer(e)}
             onBlur={(e) => updatePlayerInState(e)}
           />
@@ -96,7 +93,7 @@ function PlayerPaper(props) {
             InputProps={{
               classes: { input: classes.inputStyle },
             }}
-            value={_player.initiative}
+            value={_player.initiative?.toString() || ""}
             onChange={(e) => editPlayer(e)}
             onBlur={(e) => updatePlayerInState(e)}
           />
@@ -109,7 +106,7 @@ function PlayerPaper(props) {
             InputProps={{
               classes: { input: classes.inputStyle },
             }}
-            value={_player.priority}
+            value={_player.priority?.toString() || ""}
             onChange={(e) => editPlayer(e)}
             onBlur={(e) => updatePlayerInState(e)}
           />
@@ -126,9 +123,7 @@ function PlayerPaper(props) {
 function mapDispatchToProps(dispatch) {
   return {
     editPlayer: (p) => dispatch(editPlayer(p)),
-    clearPlayers: () => dispatch(clearPlayers()),
     removePlayer: (key) => dispatch(removePlayer(key)),
-    nextTurn: () => dispatch(nextTurn()),
   };
 }
 

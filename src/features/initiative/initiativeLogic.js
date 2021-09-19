@@ -1,1 +1,2 @@
-export default [];
+const initiativeLogic = [];
+export default initiativeLogic;

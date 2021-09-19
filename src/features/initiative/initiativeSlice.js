@@ -31,6 +31,7 @@ export const initiativeSlice = createSlice({
     clearPlayers(state, action) {
       console.log("Clearing all players");
       state.players = [];
+      state.turnIndex = 0;
     },
     removePlayer(state, action) {
       console.log("Removing player", action.payload);
@@ -52,11 +53,6 @@ export const initiativeSlice = createSlice({
       console.log("Adding player", action.payload);
       const player = { key: uuidv4(), ...action.payload };
       state.players.push(player);
-    },
-  },
-  extraReducers: {
-    ["initiative/clearPlayers"]: (state, action) => {
-      state.turnIndex = 0;
     },
   },
 });

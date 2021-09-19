@@ -4,7 +4,6 @@ import rootReducer from "./reducers";
 import rootLogic from "./logic";
 
 export const createStore = (reducer, logic) => {
-  console.log(logic);
   const logicDeps = {
     dispatchAsync: (action) => store.dispatch(action).then(unwrapResult),
   };
@@ -13,7 +12,7 @@ export const createStore = (reducer, logic) => {
   const store = configureStore({
     reducer,
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware({immutableCheck: false}).concat(logicMiddleware),
+      getDefaultMiddleware({ immutableCheck: false }).concat(logicMiddleware),
   });
 
   return store;
@@ -21,4 +20,5 @@ export const createStore = (reducer, logic) => {
 
 let store = createStore(rootReducer, rootLogic);
 
-export default () => store;
+const returnStore = () => store;
+export default returnStore;

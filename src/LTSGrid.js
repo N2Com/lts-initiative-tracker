@@ -1,4 +1,4 @@
-import React, { useCallback, createRef } from "react";
+import React, { useCallback } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import ReactTooltip from "react-tooltip";
 import { connect } from "react-redux";
@@ -12,7 +12,6 @@ import {
   ListItem,
   ListItemText,
   TextField,
-  RootRef,
 } from "@material-ui/core/";
 import {
   addPlayer,
@@ -22,7 +21,7 @@ import {
   updateIndices,
 } from "./features/initiative/initiativeSlice";
 import { useState } from "react";
-import Dropzone, { useDropzone } from "react-dropzone";
+import { useDropzone } from "react-dropzone";
 import PlayerPaper from "./PlayerPaper";
 
 const useStyles = makeStyles((theme) => ({
@@ -69,41 +68,42 @@ function LTSGrid(props) {
   const classes = useStyles();
 
   const [newPlayer, setNewPlayer] = useState({
-    name: "New Player",
-    initiative: null,
+    name: "",
+    initiative: 0,
+    priority: 0,
   });
 
   const { players, clearPlayers, addPlayer, nextTurn, prevTurn, turnIndex } =
     props;
 
-  const onDrop = useCallback((acceptedFiles) => {
-    console.log(acceptedFiles);
-    acceptedFiles.forEach((file) => {
-      var reader = new FileReader();
-      reader.onload = function (e) {
-        var contents = e.target.result;
+  const onDrop = useCallback(
+    (acceptedFiles) => {
+      acceptedFiles.forEach((file) => {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          var contents = e.target.result;
 
-        const players = JSON.parse(contents).players;
-        if (players?.length > 0) {
-          players.forEach((p) => {
-            console.log(p);
-            addPlayer(p);
-          });
-        }
-      };
-      reader.readAsText(file);
-    });
-  }, []);
+          const players = JSON.parse(contents).players;
+          if (players?.length > 0) {
+            players.forEach((p) => {
+              addPlayer(p);
+            });
+          }
+        };
+        reader.readAsText(file);
+      });
+    },
+    [addPlayer]
+  );
 
-  const { getRootProps, getInputProps, open, acceptedFiles } = useDropzone({
+  const { getRootProps, getInputProps, open } = useDropzone({
     onDrop,
     noClick: true,
-    accept: '.json'
+    accept: ".json",
   });
 
   const onChangeNewPlayer = (e) => {
     const { name, value, type } = e.target;
-    console.log("New player", e);
 
     setNewPlayer({
       ...newPlayer,
@@ -116,25 +116,26 @@ function LTSGrid(props) {
     setNewPlayer({
       name: "",
       initiative: 0,
+      priority: 0,
     });
   };
 
   const sortFunction = (a, b) => {
-    //  null is last
-    if (a.initiative === null) return 1;
-    if (b.initiative === null) return -1;
+    //  null initiative is last
+    if (a.initiative == null) return 1;
+    if (b.initiative == null) return -1;
 
     //  sort by initiative
     if (a.initiative > b.initiative) return -1;
     else if (a.initiative < b.initiative) return 1;
 
-    if (a.priority && b.priority) {
-      //  fallback to priority
-      if (a.priority > b.priority) return -1;
-      else if (a.priority < b.priority) return 1;
-    }
+    //  null priority goes to bottom of equal initiatives
+    if (a.priority == null || a.priority === "") return 1;
+    if (b.priority == null || b.priority === "") return -1;
 
-    //  fallback to name
+    if (a.priority > b.priority) return -1;
+    else if (a.priority < b.priority) return 1;
+
     return -1;
   };
 
@@ -143,7 +144,7 @@ function LTSGrid(props) {
   return (
     <div className={classes.root}>
       <Box display="flex" flexDirection="column" style={{ height: "100vh" }}>
-        <Grid container flexShrink="1" className={classes.topGrid}>
+        <Grid container className={classes.topGrid}>
           <Grid item xs={6}>
             <Button
               fullWidth
@@ -179,18 +180,17 @@ function LTSGrid(props) {
             <Grid
               container
               direction="row"
-              justify="center"
+              justifyContent="center"
               alignItems="center"
             >
               <List component="nav" style={{ flexGrow: 1 }}>
                 {sortedPlayers.map((player, index) => {
                   return (
-                    <Paper className={classes.paperListItem}>
+                    <Paper className={classes.paperListItem} key={player.key}>
                       <ListItem selected={index === turnIndex}>
                         <ListItemText>
                           {
                             <PlayerPaper
-                              key={player.key}
                               index={index}
                               player={player}
                             ></PlayerPaper>
