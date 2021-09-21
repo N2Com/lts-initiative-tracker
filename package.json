@@ -2,7 +2,7 @@
   "productName": "Less Than Simple Initiative Tracker",
   "main": "public/electron.js",
   "name": "less-than-simple-initiative-tracker",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "A truly simple initiative tracker, with no extra fluff",
   "author": {
     "name": "N2Com",
