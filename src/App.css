@@ -14,7 +14,26 @@ body,
 }
 .LTS-content {
   flex: 1 1 auto;
+  overflow-y: auto;
 }
 .LTS-footer {
   flex: 0 1 40px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .title-logo {
+    animation: App-logo-float infinite ease-in-out 10s;
+  }
+}
+
+@keyframes App-logo-float {
+  0% {
+    transform: rotate(0deg);
+  }
+  80% {
+    transform: rotate(360deg);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
 }

@@ -1,25 +1,77 @@
-import React from "react";
+import React, { useCallback } from "react";
 import "./App.css";
 import LTSGrid from "./LTSGrid";
-import CustomTitleBar from "./CustomTitleBar";
+import LTSTopBar from "./LTSTopBar";
+import { connect } from "react-redux";
+import { addPlayer } from "./features/initiative/initiativeSlice";
+import { useDropzone } from "react-dropzone";
+import ReactTooltip from "react-tooltip";
+import LTSBotBar from "./LTSBotBar";
+import LTSTitleBar from "./LTSTitleBar";
 
-function LTS() {
+function LTS(props) {
+  const { addPlayer } = props;
+
+  const onDrop = useCallback(
+    (acceptedFiles) => {
+      acceptedFiles.forEach((file) => {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          var contents = e.target.result;
+
+          const players = JSON.parse(contents).players;
+          console.log(players);
+          if (players?.length > 0) {
+            players.forEach((p) => {
+              addPlayer(p);
+            });
+          }
+        };
+        reader.readAsText(file);
+      });
+    },
+    [addPlayer]
+  );
+
+  const { getRootProps, getInputProps, open } = useDropzone({
+    onDrop,
+    noClick: true,
+    accept: ".json",
+  });
+
   return (
-    <div class="LTS">
-      <div class="LTS-header">
-        <p>header (sized to content)</p>
+    <div className="LTS">
+      <div className="LTS-header">
+        <LTSTitleBar />
       </div>
-      <div class="LTS-header">
-        <p>header (sized to content)</p>
+      <div className="LTS-header">
+        <LTSTopBar getInputProps={getInputProps} open={open} />
       </div>
-      <div class="LTS-content">
-        <p>content (fills remaining space)</p>
+      <div className="LTS-content">
+        <LTSGrid
+          getRootProps={getRootProps}
+          getInputProps={getInputProps}
+          open={open}
+        />
       </div>
-      <div class="LTS-footer">
-        <p>footer (fixed height)</p>
+      <div className="LTS-footer">
+        <LTSBotBar />
       </div>
+
+      <ReactTooltip id="leftSide" place="left" effect="solid" />
+      <ReactTooltip id="rightSide" place="right" effect="solid" />
+      <ReactTooltip id="botSide" place="bottom" effect="solid" />
     </div>
   );
 }
+function mapDispatchToProps(dispatch) {
+  return {
+    addPlayer: (p) => dispatch(addPlayer(p)),
+  };
+}
 
-export default LTS;
+function mapStateToProps(state) {
+  return {};
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LTS);
