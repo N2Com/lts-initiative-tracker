@@ -3,6 +3,7 @@ import { toggleDarkMode } from "./features/theme/themeSlice";
 import { DarkMode, LightMode } from "@mui/icons-material";
 import { Switch } from "@mui/material";
 import { connect } from "react-redux";
+import { Box } from "@mui/system";
 
 const useStyles = makeStyles((theme) => ({
   switchNegativeMargin: {
@@ -13,17 +14,16 @@ const useStyles = makeStyles((theme) => ({
 
 function ThemeSwitch(props) {
   const classes = useStyles();
-  console.log(props.theme);
   return (
-    <div>
+    <Box display="flex" alignItems="center" justifyContent="center">
       <LightMode></LightMode>
       <Switch
         className={classes.switchNegativeMargin}
-        checked={props.theme.darkMode}
-        onClick={props.theme.toggleTheme}
+        checked={props.darkMode}
+        onClick={props.toggleDarkMode}
       ></Switch>
       <DarkMode></DarkMode>
-    </div>
+    </Box>
   );
 }
 

@@ -30,6 +30,7 @@ import {
 import { useState } from "react";
 import { useDropzone } from "react-dropzone";
 import PlayerPaper from "./PlayerPaper";
+import ThemeSwitch from "./ThemeSwitch";
 
 const useStyles = makeStyles((theme) => ({
   inputStyle: {
@@ -171,15 +172,7 @@ function LTSGrid(props) {
             </Button>
           </Grid>
           <Grid item xs={4}>
-            <Box display="flex" alignItems="center" justifyContent="center">
-              <LightMode></LightMode>
-              <Switch
-                className={classes.switchNegativeMargin}
-                checked={props.theme}
-                onClick={props.toggleTheme}
-              ></Switch>
-              <DarkMode></DarkMode>
-            </Box>
+              <ThemeSwitch></ThemeSwitch>
           </Grid>
           <Grid item xs={2}>
             <Button
