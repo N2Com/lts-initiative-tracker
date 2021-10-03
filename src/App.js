@@ -2,8 +2,8 @@ import React from "react";
 import { Provider } from "react-redux";
 import storeFactory from "./app/store";
 import "./App.css";
-import LTSGrid from "./LTSGrid";
 import CustomThemeProvider from "./CustomThemeProvider";
+import LTS from "./LTS";
 
 function App() {
   const store = storeFactory();
@@ -12,7 +12,7 @@ function App() {
     <React.StrictMode>
       <Provider store={store}>
         <CustomThemeProvider>
-          <LTSGrid />
+          <LTS />
         </CustomThemeProvider>
       </Provider>
     </React.StrictMode>

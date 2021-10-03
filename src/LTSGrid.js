@@ -9,6 +9,7 @@ import {
   ListItemText,
   TextField,
   Switch,
+  AppBar,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import {
@@ -154,7 +155,7 @@ function LTSGrid(props) {
   const sortedPlayers = [...players].sort(sortFunction);
 
   return (
-    <div className={classes.root}>
+    <div>
       <Box display="flex" flexDirection="column" style={{ height: "100vh" }}>
         <Grid container className={classes.topGrid} columnSpacing={1}>
           <Grid item xs={6}>
@@ -172,7 +173,7 @@ function LTSGrid(props) {
             </Button>
           </Grid>
           <Grid item xs={4}>
-              <ThemeSwitch></ThemeSwitch>
+            <ThemeSwitch></ThemeSwitch>
           </Grid>
           <Grid item xs={2}>
             <Button

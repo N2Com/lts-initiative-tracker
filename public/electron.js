@@ -17,7 +17,7 @@ function createWindow() {
     height: 560,
     minHeight: 560,
     show: true,
-    frame: true,
+    frame: false,
     title: "Less Than Simple Initiative Tracker",
     fullscreenable: true,
     resizable: true,
@@ -48,7 +48,7 @@ function createWindow() {
   }
 
   // Open the DevTools.
-  //window.webContents.openDevTools()
+  window.webContents.openDevTools()
 }
 
 // This method will be called when Electron has finished
