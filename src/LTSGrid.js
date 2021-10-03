@@ -1,8 +1,4 @@
 import React, { useCallback } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import ReactTooltip from "react-tooltip";
-import { connect } from "react-redux";
-import { ArrowBack, ArrowForward, Publish } from "@material-ui/icons";
 import {
   Grid,
   Paper,
@@ -12,7 +8,18 @@ import {
   ListItem,
   ListItemText,
   TextField,
-} from "@material-ui/core/";
+  Switch,
+} from "@mui/material";
+import { makeStyles } from "@mui/styles";
+import {
+  ArrowBack,
+  ArrowForward,
+  DarkMode,
+  LightMode,
+  Publish,
+} from "@mui/icons-material";
+import ReactTooltip from "react-tooltip";
+import { connect } from "react-redux";
 import {
   addPlayer,
   clearPlayers,
@@ -36,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
     right: theme.spacing(0),
     top: theme.spacing(0),
   },
-  terms: {
+  scrollbarOverride: {
     overflow: "auto",
     "&::-webkit-scrollbar": {
       width: "2em",
@@ -60,7 +67,11 @@ const useStyles = makeStyles((theme) => ({
   paperListItem: {
     margin: theme.spacing(0.5),
   },
-  buttonSpacing1: { padding: theme.spacing(2) },
+  switchNegativeMargin: {
+    marginLeft: theme.spacing(-1),
+    marginRight: theme.spacing(-1),
+  },
+  buttonSpacing1: { padding: theme.spacing(1), height: "100%" },
   buttonSpacing0: { padding: theme.spacing(0) },
 }));
 
@@ -144,12 +155,12 @@ function LTSGrid(props) {
   return (
     <div className={classes.root}>
       <Box display="flex" flexDirection="column" style={{ height: "100vh" }}>
-        <Grid container className={classes.topGrid}>
+        <Grid container className={classes.topGrid} columnSpacing={1}>
           <Grid item xs={6}>
             <Button
               fullWidth
               size="medium"
-              variant="outlined"
+              variant="contained"
               color="primary"
               onClick={open}
             >
@@ -159,12 +170,22 @@ function LTSGrid(props) {
               </div>
             </Button>
           </Grid>
-          <Grid item xs={4}></Grid>
+          <Grid item xs={4}>
+            <Box display="flex" alignItems="center" justifyContent="center">
+              <LightMode></LightMode>
+              <Switch
+                className={classes.switchNegativeMargin}
+                checked={props.theme}
+                onClick={props.toggleTheme}
+              ></Switch>
+              <DarkMode></DarkMode>
+            </Box>
+          </Grid>
           <Grid item xs={2}>
             <Button
               fullWidth
               size="medium"
-              variant="outlined"
+              variant="contained"
               color="secondary"
               onClick={clearPlayers}
               data-for="leftSide"
@@ -174,7 +195,7 @@ function LTSGrid(props) {
             </Button>
           </Grid>
         </Grid>
-        <Box flex="1" className={classes.terms}>
+        <Box flex="1" className={classes.scrollbarOverride}>
           <div style={{ height: "100%" }} {...getRootProps()}>
             <input {...getInputProps()} />
             <Grid
@@ -205,13 +226,14 @@ function LTSGrid(props) {
           </div>
         </Box>
 
-        <Grid container className={classes.botGrid}>
+        <Grid container className={classes.botGrid} columnSpacing={1}>
           <Grid item xs={4} className={classes.gridItem}>
             <TextField
               className={classes.paperListItem}
               label="Name"
               name="name"
               value={newPlayer.name}
+              variant="standard"
               onChange={(e) => onChangeNewPlayer(e)}
             />
           </Grid>
@@ -221,6 +243,7 @@ function LTSGrid(props) {
               label="Initiative"
               name="initiative"
               type="number"
+              variant="standard"
               InputLabelProps={{
                 shrink: true,
               }}
@@ -232,43 +255,45 @@ function LTSGrid(props) {
               onChange={(e) => onChangeNewPlayer(e)}
             />
           </Grid>
-          <Grid item xs={2}>
-            <Button
-              className={classes.buttonSpacing1}
-              fullWidth
-              size="small"
-              variant="outlined"
-              color="primary"
-              onClick={addNewPlayer}
-            >
-              <Publish></Publish>
-            </Button>
-          </Grid>
-          <Grid item xs={2}>
-            {
-              <Button
-                className={classes.buttonSpacing1}
-                fullWidth
-                size="small"
-                variant="outlined"
-                color="primary"
-                onClick={prevTurn}
-              >
-                <ArrowBack></ArrowBack>
-              </Button>
-            }
-          </Grid>
-          <Grid item xs={2}>
-            <Button
-              className={classes.buttonSpacing1}
-              fullWidth
-              size="small"
-              variant="outlined"
-              color="primary"
-              onClick={nextTurn}
-            >
-              <ArrowForward></ArrowForward>
-            </Button>
+          <Grid item xs={6} fullWidth style={{ height: "100%" }}>
+            <Grid item container style={{ height: "100%" }} columnSpacing={1}>
+              <Grid item xs={4}>
+                <Button
+                  fullWidth
+                  className={classes.buttonSpacing1}
+                  size="small"
+                  variant="contained"
+                  color="primary"
+                  onClick={addNewPlayer}
+                >
+                  <Publish></Publish>
+                </Button>
+              </Grid>
+              <Grid item xs={4}>
+                <Button
+                  fullWidth
+                  className={classes.buttonSpacing1}
+                  size="small"
+                  variant="contained"
+                  color="primary"
+                  onClick={prevTurn}
+                >
+                  <ArrowBack></ArrowBack>
+                </Button>
+              </Grid>
+              <Grid item xs={4}>
+                <Button
+                  fullWidth
+                  className={classes.buttonSpacing1}
+                  size="small"
+                  variant="contained"
+                  color="primary"
+                  onClick={nextTurn}
+                >
+                  <ArrowForward></ArrowForward>
+                </Button>
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
       </Box>

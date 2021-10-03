@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { TextField, Grid, Box } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import { TextField, Grid, Box } from "@mui/material";
+import { makeStyles } from "@mui/styles";
+import { Delete } from "@mui/icons-material";
 import ReactTooltip from "react-tooltip";
-import { Delete } from "@material-ui/icons";
 import {
   editPlayer,
   removePlayer,
@@ -18,6 +18,13 @@ const useStyles = makeStyles((theme) => ({
   },
   gridItem: {
     flexGrow: 1,
+  },
+  iconCursor: {
+    cursor: "pointer",
+    position: "absolute",
+    right: theme.spacing(0.5),
+    top: theme.spacing(0.5),
+    zIndex: 999,
   },
 }));
 
@@ -52,34 +59,24 @@ function PlayerPaper(props) {
 
   return (
     <div>
+      <Delete
+        className={classes.iconCursor}
+        onClick={() => removePlayer(_player.key)}
+        tabIndex={-1}
+        data-tip="Remove Player"
+        data-for="leftSide"
+      />
       <Grid
         container
         style={{ position: "relative" }}
         direction="row"
         spacing={2}
       >
-        <Grid item xs={1} className={classes.gridItem}>
-          <Box
-            display="flex"
-            justifyContent="left"
-            alignItems="center"
-            minHeight="100%"
-          >
-            <a
-              href="/#"
-              onClick={() => removePlayer(_player.key)}
-              tabIndex={-1}
-              data-tip="Remove Player"
-              data-for="rightSide"
-            >
-              <Delete />
-            </a>
-          </Box>
-        </Grid>
         <Grid item xs={5} className={classes.gridItem}>
           <TextField
             label="Name"
             name="name"
+            variant="standard"
             value={_player.name || ""}
             onChange={(e) => editPlayer(e)}
             onBlur={(e) => updatePlayerInState(e)}
@@ -90,6 +87,7 @@ function PlayerPaper(props) {
             label="Initiative"
             name="initiative"
             type="number"
+            variant="standard"
             InputProps={{
               classes: { input: classes.inputStyle },
             }}
@@ -103,6 +101,7 @@ function PlayerPaper(props) {
             label="Priority"
             name="priority"
             type="number"
+            variant="standard"
             InputProps={{
               classes: { input: classes.inputStyle },
             }}
@@ -110,6 +109,14 @@ function PlayerPaper(props) {
             onChange={(e) => editPlayer(e)}
             onBlur={(e) => updatePlayerInState(e)}
           />
+        </Grid>
+        <Grid item xs={1} className={classes.gridItem}>
+          <Box
+            display="flex"
+            justifyContent="left"
+            alignItems="center"
+            minHeight="100%"
+          ></Box>
         </Grid>
       </Grid>
 
