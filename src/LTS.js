@@ -41,7 +41,7 @@ function LTS(props) {
 
   return (
     <div className="LTS">
-      <div className="LTS-header">
+      <div className="LTS-title">
         <LTSTitleBar />
       </div>
       <div className="LTS-header">

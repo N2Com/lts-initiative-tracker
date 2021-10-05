@@ -9,6 +9,9 @@ body,
   flex-flow: column;
   height: 100%;
 }
+.LTS-title {
+  flex: 0 1 32px;
+}
 .LTS-header {
   flex: 0 1 auto;
 }

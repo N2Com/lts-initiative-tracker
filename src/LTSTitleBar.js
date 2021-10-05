@@ -3,16 +3,19 @@ import "./App.css";
 import { connect } from "react-redux";
 import { makeStyles } from "@mui/styles";
 import icosahedron from "./icosahedron.svg";
+import { AppBar } from "@mui/material";
 
 const useStyles = makeStyles((theme) => ({
   draggable: {
     "-webkit-app-region": "drag",
-    paddingTop: theme.spacing(0.5),
-    paddingLeft: theme.spacing(0.5),
-    paddingRight: theme.spacing(0.5),
   },
   interactable: {
     "-webkit-app-region": "no-drag",
+  },
+  iconSpacer: {
+    padding: theme.spacing(0.5),
+    display: "flex",
+    alignItems: "center",
   },
 }));
 
@@ -20,9 +23,18 @@ function LTSTopBar(props) {
   const classes = useStyles();
 
   return (
-    <div className={classes.draggable}>
-      <img height="20px" src={icosahedron} className="title-logo" alt="logo" />
-    </div>
+    <AppBar>
+      <div className={classes.draggable}>
+        <div className={`${classes.iconSpacer}`}>
+          <img
+            height="20px"
+            src={icosahedron}
+            className={`title-logo`}
+            alt="logo"
+          />
+        </div>
+      </div>
+    </AppBar>
   );
 }
 
