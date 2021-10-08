@@ -41,8 +41,7 @@ function LTSTopBar(props) {
           variant="contained"
           color="secondary"
           onClick={clearPlayers}
-          data-for="leftSide"
-          data-tip="Clear the board"
+          title="Clear the board"
         >
           Clear
         </Button>

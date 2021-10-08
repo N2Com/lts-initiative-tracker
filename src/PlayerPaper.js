@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { TextField, Grid, Box } from "@mui/material";
+import { TextField, Grid, Box, IconButton, Button } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { Delete } from "@mui/icons-material";
-import ReactTooltip from "react-tooltip";
 import {
   editPlayer,
   removePlayer,
@@ -19,9 +18,8 @@ const useStyles = makeStyles((theme) => ({
   gridItem: {
     flexGrow: 1,
   },
-  iconCursor: {
-    cursor: "pointer",
-    position: "absolute",
+  deleteButton: {
+    position: "absolute !important",
     right: theme.spacing(0.5),
     top: theme.spacing(0.5),
     zIndex: 999,
@@ -59,13 +57,14 @@ function PlayerPaper(props) {
 
   return (
     <div>
-      <Delete
-        className={classes.iconCursor}
+      <IconButton
         onClick={() => removePlayer(_player.key)}
         tabIndex={-1}
-        data-tip="Remove Player"
-        data-for="leftSide"
-      />
+        className={classes.deleteButton}
+        title="Remove Player"
+      >
+        <Delete />
+      </IconButton>
       <Grid
         container
         style={{ position: "relative" }}
@@ -119,10 +118,6 @@ function PlayerPaper(props) {
           ></Box>
         </Grid>
       </Grid>
-
-      <ReactTooltip id="leftSide" place="left" effect="solid" />
-      <ReactTooltip id="rightSide" place="right" effect="solid" />
-      <ReactTooltip id="botSide" place="bottom" effect="solid" />
     </div>
   );
 }

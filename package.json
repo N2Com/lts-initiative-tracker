@@ -40,7 +40,6 @@
     "react-dropzone": "^11.4.0",
     "react-redux": "^7.2.3",
     "react-scripts": "4.0.3",
-    "react-tooltip": "^4.2.21",
     "redux-logic": "^3.0.3",
     "uuid": "^8.3.2"
   },

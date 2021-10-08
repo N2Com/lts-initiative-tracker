@@ -5,33 +5,30 @@ import LTSTopBar from "./LTSTopBar";
 import { connect } from "react-redux";
 import { addPlayer } from "./features/initiative/initiativeSlice";
 import { useDropzone } from "react-dropzone";
-import ReactTooltip from "react-tooltip";
 import LTSBotBar from "./LTSBotBar";
 import LTSTitleBar from "./LTSTitleBar";
 
 function LTS(props) {
   const { addPlayer } = props;
 
-  const onDrop = useCallback(
-    (acceptedFiles) => {
-      acceptedFiles.forEach((file) => {
-        var reader = new FileReader();
-        reader.onload = function (e) {
-          var contents = e.target.result;
+  const parseFiles = (acceptedFiles) => {
+    acceptedFiles.forEach((file) => {
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        var contents = e.target.result;
 
-          const players = JSON.parse(contents).players;
-          console.log(players);
-          if (players?.length > 0) {
-            players.forEach((p) => {
-              addPlayer(p);
-            });
-          }
-        };
-        reader.readAsText(file);
-      });
-    },
-    [addPlayer]
-  );
+        const players = JSON.parse(contents).players;
+        console.log(players);
+        if (players?.length > 0) {
+          players.forEach((p) => {
+            addPlayer(p);
+          });
+        }
+      };
+      reader.readAsText(file);
+    });
+  };
+  const onDrop = useCallback(parseFiles, [addPlayer]);
 
   const { getRootProps, getInputProps, open } = useDropzone({
     onDrop,
@@ -57,10 +54,6 @@ function LTS(props) {
       <div className="LTS-footer">
         <LTSBotBar />
       </div>
-
-      <ReactTooltip id="leftSide" place="left" effect="solid" />
-      <ReactTooltip id="rightSide" place="right" effect="solid" />
-      <ReactTooltip id="botSide" place="bottom" effect="solid" />
     </div>
   );
 }
